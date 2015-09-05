@@ -52,7 +52,18 @@ const submitInputStyle = {
 function normalizeMacAddress (rawMacAddress) {
   return rawMacAddress.replace(/[-:]/g, "");  
 }
+const MAC_ADDRESS_REGEXP = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/;
 
+/*function checkMacAddress (macAddress) {
+  const errors = {};
+  if (!MAC_ADDRESS_REGEXP.test(macAddress)) {
+      errors.macAddress = "Incorrect Mac Address format!";
+    this.setState({
+       errors,
+     }); 
+    }
+   return macAddress;
+} */
 const MAC_ADDRESS_FORMATTED_SEPARATER = "-";
   
 function formatMacAddress (macAddress) {
@@ -75,13 +86,9 @@ export default class CollectDataStage extends Component {
     deviceObj: PropTypes.object.isRequired,
     onDeviceKeyValueChange: PropTypes.func.isRequired,
     stores: PropTypes.array.isRequired,
+    onCheckAddress: PropTypes.func.isRequired,
   }
 
-  /*state = {
-    deviceObj: {
-    },
-  } */
- 
   handleChange = (key, e) => {
     let value = e.target.value;
     if (key === "macAddress") {
@@ -89,14 +96,18 @@ export default class CollectDataStage extends Component {
       value = formatMacAddress(value);
     }
     this.props.onDeviceKeyValueChange(key, value);
-
-  /*this.setState({
-    deviceObj: {
-      ...this.state.deviceObj,
-      [key]:value,
-    },
-  }); */
   } 
+
+  handleKeyUp = (key, e) => {
+    let value = e.target.value;
+    if (key === "macAddress") {
+      //value = checkMacAddress(value);
+      console.log ("heyy");
+      this.props.onCheckAddress(key, value);
+    }
+     //this.props.onDeviceKeyValueChange(key, value); 
+    console.log ("heyyy");
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -154,6 +165,7 @@ export default class CollectDataStage extends Component {
           <TextField
             value={deviceObj.macAddress}
             onChange={this.handleChange.bind(this, "macAddress")}
+            onKeyUp={this.handleKeyUp.bind(this, "macAddress")}
             errorText={errors.macAddress}
             hintText="MAC Address: AA:BB:CC:11:22:33"
           />

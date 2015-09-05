@@ -58,6 +58,12 @@ export default class StageChangeContainer extends Component {
     });
   }
 
+  handleHomeClicked = () => {
+    this.setState({
+      stage: 1,
+    });
+  }
+
   handleDeviceCreated = (deviceObjFromServer) => {
     console.log("Created!", deviceObjFromServer);
 
@@ -90,6 +96,7 @@ export default class StageChangeContainer extends Component {
           //devices={this.state.devices}
           brandDeviceList={this.state.brandDeviceList}
           onDeviceCreated={this.handleDeviceCreated}
+          onHomeClicked={this.handleHomeClicked}
         />
       </div>
     );

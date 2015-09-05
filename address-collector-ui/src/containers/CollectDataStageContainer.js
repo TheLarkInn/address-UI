@@ -26,6 +26,7 @@ export default class CollectDataStageContainer extends Component {
     brandDeviceList: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,
     onDeviceCreated: PropTypes.func.isRequired,
+    onHomeClicked: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -51,6 +52,19 @@ export default class CollectDataStageContainer extends Component {
         [key]: value,
       },
     });
+  this.setState({
+    errors,
+  });
+  }
+
+  handleCheckAddress = (key, value) => {
+  const errors = {};
+  if (!MAC_ADDRESS_REGEXP.test(value)) {
+        errors.macAddress = "Incorrect Mac Address format!";
+    }
+  this.setState({
+      errors,
+  });
   }
 
   handleNewManufacture = () => {
@@ -77,12 +91,16 @@ export default class CollectDataStageContainer extends Component {
     if (!MAC_ADDRESS_REGEXP.test(macAddress)) {
       errors.macAddress = "Incorrect Mac Address format!";
     }
- 
-    var value = [manufacture, device, macAddress, country];
- 
+    if ( !device ) {
+      errors.device = "Incorrect";
+    }
+   /* if ( null === legnth ) {
+      errors.manufacture = "This field is required.";
+    }  
+   */ 
     this.setState({
       errors,
-    });
+    }); 
     //if no error detected, go on
     if (0 === Object.keys(errors).length) {
       this.saveCountryToLocalStorage(country);
@@ -183,6 +201,8 @@ export default class CollectDataStageContainer extends Component {
         onHelpWithMacAddress={this.handleHelpWithMacAddress}
         onDeviceKeyValueChange={this.handleDeviceKeyValueChange}
         deviceObj={this.state.deviceObj}
+        onHomeClicked={this.props.onHomeClicked}
+        onCheckAddress={this.handleCheckMacAddress}
       />
       {modal}
       </div>
